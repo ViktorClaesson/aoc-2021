@@ -2,17 +2,17 @@ def translate_input(command: str) -> tuple[int, int]:
     direction, amount = command.split()
     amount = int(amount)
 
-    if direction == 'forward':
+    if direction == "forward":
         return amount, 0
-    if direction == 'up':
+    if direction == "up":
         return 0, -amount
-    if direction == 'down':
+    if direction == "down":
         return 0, amount
-    raise 'Unknown direction'
+    raise "Unknown direction"
 
 
 def part_one() -> int:
-    with open('aoc/2.txt') as file:
+    with open("aoc/2.txt") as file:
         ls = file.read().splitlines()
 
     # ls -> list[tuple[horizontal_change, vertical_change]]
@@ -28,7 +28,7 @@ def part_one() -> int:
 
 
 def part_two() -> int:
-    with open('aoc/2.txt') as file:
+    with open("aoc/2.txt") as file:
         ls = file.read().splitlines()
 
     # ls -> list[tuple[steps_forward, aim_change]]
@@ -50,6 +50,6 @@ def part_two() -> int:
     return ls[0] * ls[1]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(part_one())
     print(part_two())
