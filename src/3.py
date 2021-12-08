@@ -1,5 +1,5 @@
 def part_one() -> int:
-    with open("aoc/3.txt") as file:
+    with open("src/3.txt") as file:
         ls = map(list, file.read().splitlines())
 
     ls = zip(*ls)
@@ -26,7 +26,7 @@ def part_two_rec(ls: list[str], most_common: bool, index: int = 0) -> int:
 
 
 def part_two() -> int:
-    with open("aoc/3.txt") as file:
+    with open("src/3.txt") as file:
         ls = file.read().splitlines()
     return part_two_rec(ls, True) * part_two_rec(ls, False)
 

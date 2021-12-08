@@ -12,7 +12,7 @@ def translate_input(command: str) -> tuple[int, int]:
 
 
 def part_one() -> int:
-    with open("aoc/2.txt") as file:
+    with open("src/2.txt") as file:
         ls = file.read().splitlines()
 
     # ls -> list[tuple[horizontal_change, vertical_change]]
@@ -28,7 +28,7 @@ def part_one() -> int:
 
 
 def part_two() -> int:
-    with open("aoc/2.txt") as file:
+    with open("src/2.txt") as file:
         ls = file.read().splitlines()
 
     # ls -> list[tuple[steps_forward, aim_change]]
