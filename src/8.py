@@ -6,19 +6,29 @@ def part_one() -> int:
 
 
 def calculate_output(numbers: list[str], output: list[str]) -> int:
-    one = next(number for number in numbers if len(number) == 2)
-    seven = next(number for number in numbers if len(number) == 3)
-    four = next(number for number in numbers if len(number) == 4)
-    eight = next(number for number in numbers if len(number) == 7)
+    # 1 is the only number with two lines
+    one = next(n for n in numbers if len(n) == 2)
+    # 1 is the only number with three lines
+    seven = next(n for n in numbers if len(n) == 3)
+    # 1 is the only number with four lines
+    four = next(n for n in numbers if len(n) == 4)
+    # 1 is the only number with seven lines
+    eight = next(n for n in numbers if len(n) == 7)
 
-    three = next(number for number in numbers if len(number) == 5 and all(ch in number for ch in one))
-    nine = next(number for number in numbers if len(number) == 6 and sum(ch in three for ch in number) == 5)
+    # 3 is the only number with five lines that uses both lines in 1
+    three = next(n for n in numbers if len(n) == 5 and all(ch in n for ch in one))
+    # 9 is the only number with six lines that has five lines in common with 3
+    nine = next(n for n in numbers if len(n) == 6 and sum(ch in three for ch in n) == 5)
 
-    six = next(number for number in numbers if len(number) == 6 and not all(ch in number for ch in one))
-    five = next(number for number in numbers if len(number) == 5 and sum(ch in six for ch in number) == 5)
+    # 6 is the only number with six lines that doesn't use both lines in 1
+    six = next(n for n in numbers if len(n) == 6 and not all(ch in n for ch in one))
+    # 5 is the only number with five lines that has five lines in common with 6
+    five = next(n for n in numbers if len(n) == 5 and sum(ch in six for ch in n) == 5)
 
-    zero = next(number for number in numbers if len(number) == 6 and number not in (six, nine))
-    two = next(number for number in numbers if len(number) == 5 and number not in (five, three))
+    # 0 is the only one left with six lines
+    zero = next(n for n in numbers if len(n) == 6 and n not in (six, nine))
+    # 0 is the only one left with five lines
+    two = next(n for n in numbers if len(n) == 5 and n not in (five, three))
 
     translator = {
         "".join(sorted(zero)): "0",
