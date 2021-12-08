@@ -18,5 +18,7 @@ def main(days: int) -> int:
 
 
 if __name__ == "__main__":
+    # part one
     print(main(days=80))
+    # part two
     print(main(days=256))

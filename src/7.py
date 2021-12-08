@@ -16,5 +16,7 @@ def main(f: Callable[[int], int] = lambda x: x) -> int:
 
 
 if __name__ == "__main__":
+    # part one
     print(main())
+    # part two
     print(main(triangle))
