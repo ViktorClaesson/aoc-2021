@@ -10,12 +10,15 @@ def calculate_output(numbers: list[str], output: list[str]) -> int:
     seven = next(number for number in numbers if len(number) == 3)
     four = next(number for number in numbers if len(number) == 4)
     eight = next(number for number in numbers if len(number) == 7)
-    six = next(number for number in numbers if len(number) == 6 and not all(ch in number for ch in one))
+
     three = next(number for number in numbers if len(number) == 5 and all(ch in number for ch in one))
     nine = next(number for number in numbers if len(number) == 6 and sum(ch in three for ch in number) == 5)
-    zero = next(number for number in numbers if len(number) == 6 and number != six and number != nine)
+
+    six = next(number for number in numbers if len(number) == 6 and not all(ch in number for ch in one))
     five = next(number for number in numbers if len(number) == 5 and sum(ch in six for ch in number) == 5)
-    two = next(number for number in numbers if len(number) == 5 and number != five and number != three)
+
+    zero = next(number for number in numbers if len(number) == 6 and number not in (six, nine))
+    two = next(number for number in numbers if len(number) == 5 and number not in (five, three))
 
     translator = {
         "".join(sorted(zero)): "0",
