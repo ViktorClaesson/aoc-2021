@@ -15,13 +15,13 @@ def part_one() -> int:
     with open("src/2.txt") as file:
         ls = file.read().splitlines()
 
-    # ls -> list[tuple[horizontal_change, vertical_change]]
+    # it0 -> list[tuple[horizontal_change, vertical_change]]
     ls = map(translate_input, ls)
 
-    # ls -> tuple[list[horizontal_change], list[vertical_change]]
+    # it0 -> tuple[list[horizontal_change], list[vertical_change]]
     ls = zip(*ls)
 
-    # ls -> tuple[net_horizontal_change, net_vertical_change]
+    # it0 -> tuple[net_horizontal_change, net_vertical_change]
     ls = tuple(map(sum, ls))
 
     return ls[0] * ls[1]
@@ -31,20 +31,20 @@ def part_two() -> int:
     with open("src/2.txt") as file:
         ls = file.read().splitlines()
 
-    # ls -> list[tuple[steps_forward, aim_change]]
+    # it0 -> list[tuple[steps_forward, aim_change]]
     ls = map(translate_input, ls)
 
-    # ls -> list[tuple[steps_forward, net_aim_change]] (note: net_aim_change is at the time instance that the list index represents)
+    # it0 -> list[tuple[steps_forward, net_aim_change]] (note: net_aim_change is at the time instance that the list index represents)
     net_aim = 0
     ls = ((steps_forward, (net_aim := change_in_aim + net_aim)) for steps_forward, change_in_aim in ls)
 
-    # ls -> list[tuple[horizontal_change, vertical_change]]
+    # it0 -> list[tuple[horizontal_change, vertical_change]]
     ls = ((steps_forward, net_aim * steps_forward) for steps_forward, net_aim in ls)
 
-    # ls -> tuple[list[horizontal_change], list[vertical_change]]
+    # it0 -> tuple[list[horizontal_change], list[vertical_change]]
     ls = zip(*ls)
 
-    # ls -> tuple[net_horizontal_change, net_vertical_change]
+    # it0 -> tuple[net_horizontal_change, net_vertical_change]
     ls = tuple(map(sum, ls))
 
     return ls[0] * ls[1]
