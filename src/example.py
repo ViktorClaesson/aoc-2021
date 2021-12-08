@@ -1,11 +1,11 @@
 def part_one() -> int:
-    with open("aoc/XY.txt") as file:
+    with open("src/XY.txt") as file:
         pass
     return 0
 
 
 def part_two() -> int:
-    with open("aoc/XY.txt") as file:
+    with open("src/XY.txt") as file:
         pass
     return 0
 
