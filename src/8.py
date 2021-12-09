@@ -27,7 +27,7 @@ def calculate_output(numbers: list[str], output: list[str]) -> int:
 
     # 0 is the only one left with six lines
     zero = next(n for n in numbers if len(n) == 6 and n not in (six, nine))
-    # 0 is the only one left with five lines
+    # 2 is the only one left with five lines
     two = next(n for n in numbers if len(n) == 5 and n not in (five, three))
 
     translator = {
