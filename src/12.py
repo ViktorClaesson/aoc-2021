@@ -8,10 +8,12 @@ from typing import Iterable
 class Cave:
     name: str
     big: bool = field(init=False)
+    small: bool = field(init=False)
     connected_caves: list[Cave] = field(default_factory=list, init=False)
 
     def __post_init__(self):
         self.big = self.name.isupper()
+        self.small = not self.big
 
     def __lt__(self, other: Cave):
         return self.name.__lt__(other.name)
@@ -20,47 +22,51 @@ class Cave:
         return self.name.__str__()
 
 
-def get_paths_part_1(path: list[Cave], cave: Cave) -> Iterable[list[Cave]]:
-    if cave.name == "end":
-        yield ", ".join(map(str, [*path, cave]))
+def create_cave_network(connections: list[str]) -> dict[str, Cave]:
+    caves: dict[str, Cave] = {}
+    for line in connections:
+        cave_name_0, cave_name_1 = line.split("-")
+        if cave_name_0 not in caves:
+            caves[cave_name_0] = Cave(name=cave_name_0)
+        if cave_name_1 not in caves:
+            caves[cave_name_1] = Cave(name=cave_name_1)
+        caves[cave_name_0].connected_caves.append(caves[cave_name_1])
+        caves[cave_name_1].connected_caves.append(caves[cave_name_0])
+    return caves
+
+
+def get_paths_part_1(current_cave: Cave, previous_path: list[Cave] | None = None) -> Iterable[list[Cave]]:
+    previous_path: list[Cave] = previous_path or []
+
+    if current_cave.name == "end":
+        yield ", ".join(map(str, [*previous_path, current_cave]))
         return
 
-    for next_cave in (c for c in cave.connected_caves if c.big or c not in path):
-        yield from get_paths_part_1([*path, cave], next_cave)
-
-
-def create_cave_network(connections: list[str]) -> Cave:
-    caves = {}
-    for line in connections:
-        cave0_name, cave1_name = line.split("-")
-        if cave0_name not in caves:
-            caves[cave0_name] = Cave(name=cave0_name)
-        if cave1_name not in caves:
-            caves[cave1_name] = Cave(name=cave1_name)
-        caves[cave0_name].connected_caves.append(caves[cave1_name])
-        caves[cave1_name].connected_caves.append(caves[cave0_name])
-    return caves["start"]
+    for next_cave in (cave for cave in current_cave.connected_caves if cave.big or cave not in previous_path):
+        yield from get_paths_part_1(current_cave=next_cave, previous_path=[*previous_path, current_cave])
 
 
 def part_one() -> int:
     with open("src/12.txt") as file:
-        start = create_cave_network(connections=file.read().splitlines())
-        return len(list(get_paths_part_1(path=[], cave=start)))
+        cave_network = create_cave_network(connections=file.read().splitlines())
+        return len(list(get_paths_part_1(current_cave=cave_network["start"])))
 
 
-def get_paths_part_2(path: list[Cave], cave: Cave) -> Iterable[str]:
-    if cave.name == "end" or (not cave.big and path.count(cave) == 1):
-        yield from get_paths_part_1(path, cave)
+def get_paths_part_2(current_cave: Cave, previous_path: list[Cave] | None = None) -> Iterable[str]:
+    previous_path: list[Cave] = previous_path or []
+
+    if current_cave.name == "end" or (current_cave.small and current_cave in previous_path):
+        yield from get_paths_part_1(current_cave=current_cave, previous_path=previous_path)
         return
 
-    for next_cave in (c for c in cave.connected_caves if c.name != "start"):
-        yield from get_paths_part_2([*path, cave], next_cave)
+    for next_cave in (cave for cave in current_cave.connected_caves if cave.name != "start"):
+        yield from get_paths_part_2(current_cave=next_cave, previous_path=[*previous_path, current_cave])
 
 
 def part_two() -> int:
     with open("src/12.txt") as file:
-        start = create_cave_network(connections=file.read().splitlines())
-        return len(list(get_paths_part_2(path=[], cave=start)))
+        cave_network = create_cave_network(connections=file.read().splitlines())
+        return len(list(get_paths_part_2(current_cave=cave_network["start"])))
 
 
 if __name__ == "__main__":
