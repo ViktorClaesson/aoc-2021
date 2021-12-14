@@ -1,4 +1,5 @@
 from operator import itemgetter
+from functools import reduce
 
 PAPER = set[tuple[int, int]]
 
@@ -28,7 +29,7 @@ def fold_paper(paper: PAPER, instruction: str) -> PAPER:
 
 
 def part_one() -> int:
-    with open("src/13.test.txt") as file:
+    with open("src/13.txt") as file:
         ls = file.read().splitlines()
     paper = create_paper([line for line in ls if "," in line])
     instructions = [line for line in ls if "=" in line]
@@ -41,12 +42,11 @@ def part_two() -> str:
     paper = create_paper([line for line in ls if "," in line])
     instructions = [line for line in ls if "=" in line]
 
-    for instruction in instructions:
-        paper = fold_paper(paper, instruction)
+    paper = reduce(fold_paper, instructions, paper)
 
     range_x = range(max(map(itemgetter(0), paper)) + 1)
     range_y = range(max(map(itemgetter(1), paper)) + 1)
-    return "\n".join("".join("#" if (x, y) in paper else "." for x in range_x) for y in range_y)
+    return "\n".join("".join("██" if (x, y) in paper else "  " for x in range_x) for y in range_y)
 
 
 if __name__ == "__main__":
