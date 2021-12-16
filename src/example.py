@@ -1,15 +1,17 @@
-def part_one() -> int:
-    with open("src/XY.txt") as file:
-        pass
+from pathlib import Path
+
+import utils
+
+
+def part_one(path: Path) -> int:
     return 0
 
 
-def part_two() -> int:
-    with open("src/XY.txt") as file:
-        pass
+def part_two(path: Path) -> int:
     return 0
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "XY.txt"
+    print(part_one(input_path))
+    print(part_two(input_path))

@@ -1,3 +1,7 @@
+from pathlib import Path
+
+import utils
+
 NODE_INDEX = tuple[int, int]
 COST_MATRIX = dict[NODE_INDEX, int]
 
@@ -41,12 +45,11 @@ def extend_matrix(matrix: COST_MATRIX, times: int) -> COST_MATRIX:
 
 
 if __name__ == "__main__":
-    with open("src/15.txt") as file:
-        ls = file.read().splitlines()
-
-    global_matrix: COST_MATRIX = {(x, y): int(ch) for y, ch_row in enumerate(ls) for x, ch in enumerate(ch_row)}
+    input_path = Path(__file__).parents[1] / "input" / "15.txt"
+    global_matrix = utils.read_matrix(input_path)
+    global_cost_matrix: COST_MATRIX = {(x, y): v for y, row in enumerate(global_matrix) for x, v in enumerate(row)}
 
     print("Part 1:")
-    print(main(global_matrix))
+    print(main(global_cost_matrix))
     print("Part 2:")
-    print(main(extend_matrix(global_matrix, 5)))
+    print(main(extend_matrix(global_cost_matrix, 5)))

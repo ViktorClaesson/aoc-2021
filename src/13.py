@@ -1,11 +1,14 @@
-from operator import itemgetter
 from functools import reduce
+from operator import itemgetter
+from pathlib import Path
+
+import utils
 
 PAPER = set[tuple[int, int]]
 
 
-def create_paper(ls: list[str]) -> PAPER:
-    return {tuple(int(i) for i in line.split(",")) for line in ls}
+def create_paper(lines: list[str]) -> PAPER:
+    return {tuple(int(i) for i in line.split(",")) for line in lines}
 
 
 def fold_index(index: int, fold_at: int) -> int:
@@ -28,19 +31,17 @@ def fold_paper(paper: PAPER, instruction: str) -> PAPER:
         raise f"unknown axis: {axis}"
 
 
-def part_one() -> int:
-    with open("src/13.txt") as file:
-        ls = file.read().splitlines()
-    paper = create_paper([line for line in ls if "," in line])
-    instructions = [line for line in ls if "=" in line]
+def part_one(path: Path) -> int:
+    lines = utils.read_lines(path)
+    paper = create_paper([line for line in lines if "," in line])
+    instructions = [line for line in lines if "=" in line]
     return len(fold_paper(paper, instructions[0]))
 
 
-def part_two() -> str:
-    with open("src/13.txt") as file:
-        ls = file.read().splitlines()
-    paper = create_paper([line for line in ls if "," in line])
-    instructions = [line for line in ls if "=" in line]
+def part_two(path: Path) -> str:
+    lines = utils.read_lines(path)
+    paper = create_paper([line for line in lines if "," in line])
+    instructions = [line for line in lines if "=" in line]
 
     paper = reduce(fold_paper, instructions, paper)
 
@@ -50,5 +51,8 @@ def part_two() -> str:
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "13.txt"
+    print("Part 1:")
+    print(part_one(input_path))
+    print("Part 2:")
+    print(part_two(input_path))

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Iterable
+
+import utils
 
 
 @dataclass
@@ -46,10 +49,9 @@ def get_paths_part_1(current_cave: Cave, previous_path: list[Cave] | None = None
         yield from get_paths_part_1(current_cave=next_cave, previous_path=[*previous_path, current_cave])
 
 
-def part_one() -> int:
-    with open("src/12.txt") as file:
-        cave_network = create_cave_network(connections=file.read().splitlines())
-        return len(list(get_paths_part_1(current_cave=cave_network["start"])))
+def part_one(path: Path) -> int:
+    cave_network = create_cave_network(connections=utils.read_lines(path))
+    return len(list(get_paths_part_1(current_cave=cave_network["start"])))
 
 
 def get_paths_part_2(current_cave: Cave, previous_path: list[Cave] | None = None) -> Iterable[str]:
@@ -63,12 +65,14 @@ def get_paths_part_2(current_cave: Cave, previous_path: list[Cave] | None = None
         yield from get_paths_part_2(current_cave=next_cave, previous_path=[*previous_path, current_cave])
 
 
-def part_two() -> int:
-    with open("src/12.txt") as file:
-        cave_network = create_cave_network(connections=file.read().splitlines())
-        return len(list(get_paths_part_2(current_cave=cave_network["start"])))
+def part_two(path: Path) -> int:
+    cave_network = create_cave_network(connections=utils.read_lines(path))
+    return len(list(get_paths_part_2(current_cave=cave_network["start"])))
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "12.txt"
+    print("Part 1:")
+    print(part_one(input_path))
+    print("Part 2:")
+    print(part_two(input_path))

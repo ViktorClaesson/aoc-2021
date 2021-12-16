@@ -1,3 +1,8 @@
+from pathlib import Path
+
+import utils
+
+
 def get_neighbours(matrix: list[list], x: int, y: int):
     return [
         (nx, ny)
@@ -19,9 +24,8 @@ def next_step(matrix: list[list[int]]) -> list[list[int]]:
     return [[v if v < 10 else 0 for v in row] for row in new_matrix]
 
 
-def part_one() -> int:
-    with open("src/11.txt") as file:
-        matrix = [[int(ch) for ch in row] for row in file.read().splitlines()]
+def part_one(path: Path) -> int:
+    matrix = utils.read_matrix(path)
     flash_count: int = 0
     for i in range(100):
         matrix = next_step(matrix)
@@ -29,9 +33,8 @@ def part_one() -> int:
     return flash_count
 
 
-def part_two() -> int:
-    with open("src/11.txt") as file:
-        matrix = [[int(ch) for ch in row] for row in file.read().splitlines()]
+def part_two(path: Path) -> int:
+    matrix = utils.read_matrix(path)
     step_count = 0
     while True:
         if all(v == 0 for row in matrix for v in row):
@@ -42,5 +45,8 @@ def part_two() -> int:
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "11.txt"
+    print("Part 1:")
+    print(part_one(input_path))
+    print("Part 2:")
+    print(part_two(input_path))

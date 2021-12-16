@@ -1,6 +1,9 @@
 from collections import Counter
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable
+
+import utils
 
 
 @dataclass
@@ -38,22 +41,21 @@ def get_points(v1: Vector, v2: Vector) -> Iterable[Vector]:
         yield from get_straight_points(v1, v2)
 
 
-def part_one() -> int:
-    with open("src/5.txt") as file:
-        lines = file.read().splitlines()
-    lines = map(translate_input, lines)
+def part_one(path: Path) -> int:
+    lines = utils.read_custom(path, translate_input)
     points = (p for v1, v2 in lines for p in get_straight_points(v1, v2))
     return sum(n > 1 for n in Counter(points).values())
 
 
-def part_two() -> int:
-    with open("src/5.txt") as file:
-        lines = file.read().splitlines()
-    lines = map(translate_input, lines)
+def part_two(path: Path) -> int:
+    lines = utils.read_custom(path, translate_input)
     points = (p for v1, v2 in lines for p in get_points(v1, v2))
     return sum(n > 1 for n in Counter(points).values())
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "05.txt"
+    print("Part 1:")
+    print(part_one(input_path))
+    print("Part 2:")
+    print(part_two(input_path))

@@ -1,40 +1,29 @@
 from collections import Counter, defaultdict
-from typing import Callable, Any, Generator
-from functools import reduce
+from pathlib import Path
 
+import utils
 
 Polymer = dict[str, int]
 
 
-def repeat(fn: Callable[[Any], Any], initial: Any, n: int) -> Any:
-    return reduce(lambda acc, _: fn(acc), range(n), initial)
+def part_one(path: Path) -> int:
+    lines = utils.read_lines(path)
 
-def repeat_generator(fn: Callable[[Any], Any], initial: Any) -> Generator[Any, None, None]:
-    while True:
-        yield initial
-        initial = fn(initial)
-
-
-def part_one() -> int:
-    with open("src/14.txt") as file:
-        ls = file.read().splitlines()
-
-    polymer: str = ls[0]
-    rules: dict[str, str] = {pair: insert for pair, insert in (rule.split(' -> ') for rule in ls[2:])}
+    polymer: str = lines[0]
+    rules: dict[str, str] = {pair: insert for pair, insert in (rule.split(" -> ") for rule in lines[2:])}
 
     for i in range(10):
-        polymer = ''.join(f"{A}{rules.get(f'{A}{B}', '')}" for A, B in zip(polymer, polymer[1:] + ' '))
+        polymer = "".join(f"{A}{rules.get(f'{A}{B}', '')}" for A, B in zip(polymer, polymer[1:] + " "))
 
     character_counts = Counter(polymer)
     return max(character_counts.values()) - min(character_counts.values())
 
 
-def part_two() -> int:
-    with open("src/14.txt") as file:
-        ls: list[str] = file.read().splitlines()
+def part_two(path: Path) -> int:
+    lines = utils.read_lines(path)
 
-    polymer: dict[str, int] = {key: value for key, value in Counter(''.join(chs) for chs in zip(ls[0], ls[0][1:] + ' ')).items()}
-    rules: dict[str, str] = {pair: insert for pair, insert in (rule.split(' -> ') for rule in ls[2:])}
+    polymer: dict[str, int] = {key: value for key, value in Counter("".join(chs) for chs in zip(lines[0], lines[0][1:] + " ")).items()}
+    rules: dict[str, str] = {pair: insert for pair, insert in (rule.split(" -> ") for rule in lines[2:])}
 
     for _ in range(40):
         new_polymer = defaultdict(int)
@@ -53,5 +42,8 @@ def part_two() -> int:
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "14.txt"
+    print("Part 1:")
+    print(part_one(input_path))
+    print("Part 2:")
+    print(part_two(input_path))

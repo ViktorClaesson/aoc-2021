@@ -1,3 +1,8 @@
+from pathlib import Path
+
+import utils
+
+
 def get_neighbours(matrix: list[list], row: int, col: int) -> list[tuple[int, int]]:
     return [
         (neighbour_row, neighbour_col)
@@ -6,9 +11,8 @@ def get_neighbours(matrix: list[list], row: int, col: int) -> list[tuple[int, in
     ]
 
 
-def part_one() -> int:
-    with open("src/9.txt") as file:
-        matrix: list[list[int]] = [[int(ch) for ch in row] for row in file.read().splitlines()]
+def part_one(path: Path) -> int:
+    matrix = utils.read_matrix(path)
     return sum(
         1 + matrix[row][col]
         for row in range(len(matrix))
@@ -34,13 +38,15 @@ def get_basin_sizes(matrix: list[list[int]]) -> list[int]:
     return basin_sizes
 
 
-def part_two() -> int:
-    with open("src/9.txt") as file:
-        matrix: list[list[int]] = [[int(ch) for ch in row] for row in file.read().splitlines()]
+def part_two(path: Path) -> int:
+    matrix = utils.read_matrix(path)
     basin_sizes: list[int] = sorted(get_basin_sizes(matrix), reverse=True)
     return basin_sizes[0] * basin_sizes[1] * basin_sizes[2]
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "09.txt"
+    print("Part 1:")
+    print(part_one(input_path))
+    print("Part 2:")
+    print(part_two(input_path))

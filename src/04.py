@@ -1,4 +1,7 @@
 from dataclasses import dataclass, field
+from pathlib import Path
+
+import utils
 
 
 @dataclass
@@ -34,9 +37,8 @@ def load_boards(lines: list[str]) -> list[Board]:
     return boards
 
 
-def part_one() -> int:
-    with open("src/4.txt") as file:
-        lines = file.read().splitlines()
+def part_one(path: Path) -> int:
+    lines = utils.read_lines(path)
     draws: list[int] = [int(n) for n in lines[0].split(",")]
     boards: list[Board] = load_boards(lines[2:])
 
@@ -48,9 +50,8 @@ def part_one() -> int:
     return 0
 
 
-def part_two() -> int:
-    with open("src/4.txt") as file:
-        lines = file.read().splitlines()
+def part_two(path: Path) -> int:
+    lines = utils.read_lines(path)
     draws: list[int] = [int(n) for n in lines[0].split(",")]
     boards: list[Board] = load_boards(lines[2:])
 
@@ -64,5 +65,8 @@ def part_two() -> int:
 
 
 if __name__ == "__main__":
-    print(part_one())
-    print(part_two())
+    input_path = Path(__file__).parents[1] / "input" / "04.txt"
+    print("Part 1:")
+    print(part_one(input_path))
+    print("Part 2:")
+    print(part_two(input_path))

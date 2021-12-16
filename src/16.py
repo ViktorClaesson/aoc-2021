@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from functools import reduce
 from pathlib import Path
 
+import utils
+
 
 @dataclass
 class Package:
@@ -107,7 +109,9 @@ if __name__ == "__main__":
         "E": "1110",
         "F": "1111",
     }
-    hex_str = (Path(__file__).parent / "16.txt").open().read().splitlines()[0]
+
+    input_path = Path(__file__).parents[1] / "input" / "16.txt"
+    hex_str = utils.read_lines(input_path)[0]
     bit_str = "".join(hex_to_binary_converter[hex_digit] for hex_digit in hex_str)
     root_package = get_root_package(bit_str)
 
