@@ -8,19 +8,6 @@ def triangle(n: int) -> int:
     return n * (n + 1) // 2
 
 
-def x_n(x0: int, n: int) -> int:
-    n = min(n, abs(x0))
-    return n * x0 - triangle(n - 1)
-
-
-def y_n(y0: int, n: int) -> int:
-    return n * y0 - triangle(n - 1)
-
-
-def max_height(y0: int) -> int:
-    return y_n(y0, max(y0, 0))
-
-
 def part_one(path: Path) -> int:
     _, y_range = utils.read_lines(path)[0][13:].split(", ")
     y_min, _ = [int(v) for v in y_range[2:].split("..")]
@@ -28,14 +15,30 @@ def part_one(path: Path) -> int:
     # =>
     # y_0 = (y_n + n * (n - 1) * 0.5) / n
 
-    # n = -2 * y_n (P.S. just saw that this was consistently a answer)
+    # n = -2 * y_n
     # => y_0 = (y_n + -2 * y_n * (-2 * y_n - 1) * 0.5) / (-2 * y_n)
     # => y_0 = -(y_n + y_n * (2 * y_n + 1)) / (2 * y_n)
     # => y_0 = -(1 + 2 * y_n + 1) / 2
     # => y_0 = -(1 + y_n)
+    # So for every y_target that we want to hit, there exists a y_0 = -(1 + y_target) that will be reach it in 2 * y_0 steps.
 
-    # to maximize the height from y_0 we want to pick the lowest y, aka y_min
-    return max_height(-(y_min + 1))
+    # To maximize the height we want to maximize the starting velocity, so we pick the lowest point.
+    # The maximum height is achieved after y_0 steps, since after that the triangle numbers (y0 + 1, ...) are out pacing the linear growth of y0 * n
+    n = y0 = -(y_min + 1)
+    return y0 * n - triangle(n - 1)
+
+
+def hits_target(x0: int, y0: int, x_min: int, x_max: int, y_min: int, y_max: int) -> bool:
+    x, y = 0, 0
+    while x <= x_max and y >= y_min:
+        if x_min <= x <= x_max and y_min <= y <= y_max:
+            return True
+        x += x0
+        y += y0
+
+        x0 -= math.copysign(1, x0) if x0 != 0 else 0
+        y0 -= 1
+    return False
 
 
 def part_two(path: Path) -> int:
@@ -43,14 +46,7 @@ def part_two(path: Path) -> int:
     x_min, x_max = [int(v) for v in x_range[2:].split("..")]
     y_min, y_max = [int(v) for v in y_range[2:].split("..")]
     paths: set[tuple[int, int]] = {
-        (x0, y0)
-        for n in range(1, -2 * y_min + 1)
-        for y in range(y_min, y_max + 1)
-        for y0 in [math.floor((y + n * (n - 1) / 2) / n), math.ceil((y + n * (n - 1) / 2) / n)]
-        if y_n(y0, n) == y
-        for x in range(x_min, x_max + 1)
-        for x0 in range(x // n, x + 1)
-        if x_n(x0, n) == x
+        (x0, y0) for x0 in range(1, x_max + 1) for y0 in range(y_min, abs(y_min) + 1) if hits_target(x0, y0, x_min, x_max, y_min, y_max)
     }
     return len(paths)
 
