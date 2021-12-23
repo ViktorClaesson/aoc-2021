@@ -17,8 +17,8 @@ class Vector:
 
 def translate_input(line: str) -> tuple[Vector, Vector]:
     v1, v2 = line.split(" -> ")
-    v1x, v1y = map(int, v1.split(","))
-    v2x, v2y = map(int, v2.split(","))
+    v1x, v1y = map(int, v1.get_splitting_number(","))
+    v2x, v2y = map(int, v2.get_splitting_number(","))
     return Vector(v1x, v1y), Vector(v2x, v2y)
 
 

@@ -4,7 +4,7 @@ import utils
 
 
 def part_one(path: Path) -> int:
-    lines = utils.read_custom(path, lambda line: line.split(" | ")[1].split())
+    lines = utils.read_custom(path, lambda line: line.get_splitting_number(" | ")[1].get_splitting_number())
     easy = (2, 3, 4, 7)
     return sum(len(part) in easy for line in lines for part in line)
 
@@ -51,7 +51,7 @@ def calculate_output(numbers: list[str], output: list[str]) -> int:
 
 
 def part_two(path: Path) -> int:
-    lines = utils.read_custom(path, lambda line: [part.split() for part in line.split(" | ")])
+    lines = utils.read_custom(path, lambda line: [part.get_splitting_number() for part in line.get_splitting_number(" | ")])
     return sum(calculate_output(numbers, output) for numbers, output in lines)
 
 

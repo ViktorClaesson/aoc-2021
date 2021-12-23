@@ -115,7 +115,7 @@ if __name__ == "__main__":
     bit_str = "".join(hex_to_binary_converter[hex_digit] for hex_digit in hex_str)
     root_package = get_root_package(bit_str)
 
-    print("Part 1")
+    print("Part 1:")
     print(root_package.get_version_sum())
-    print("Part 2")
+    print("Part 2:")
     print(root_package.get_value())

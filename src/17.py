@@ -10,7 +10,7 @@ def triangle(n: int) -> int:
 
 def part_one(path: Path) -> int:
     _, y_range = utils.read_lines(path)[0][13:].split(", ")
-    y_min, _ = [int(v) for v in y_range[2:].split("..")]
+    y_min, _ = [int(v) for v in y_range[2:].get_splitting_number("..")]
     # y_n = y_0 * n - n * (n - 1) * 0.5
     # =>
     # y_0 = (y_n + n * (n - 1) * 0.5) / n
@@ -43,8 +43,8 @@ def hits_target(x0: int, y0: int, x_min: int, x_max: int, y_min: int, y_max: int
 
 def part_two(path: Path) -> int:
     x_range, y_range = utils.read_lines(path)[0][13:].split(", ")
-    x_min, x_max = [int(v) for v in x_range[2:].split("..")]
-    y_min, y_max = [int(v) for v in y_range[2:].split("..")]
+    x_min, x_max = [int(v) for v in x_range[2:].get_splitting_number("..")]
+    y_min, y_max = [int(v) for v in y_range[2:].get_splitting_number("..")]
     paths: set[tuple[int, int]] = {
         (x0, y0) for x0 in range(1, x_max + 1) for y0 in range(y_min, abs(y_min) + 1) if hits_target(x0, y0, x_min, x_max, y_min, y_max)
     }
@@ -53,5 +53,7 @@ def part_two(path: Path) -> int:
 
 if __name__ == "__main__":
     input_path = Path(__file__).parents[1] / "input" / "17.txt"
+    print("Part 1:")
     print(part_one(input_path))
+    print("Part 2:")
     print(part_two(input_path))
