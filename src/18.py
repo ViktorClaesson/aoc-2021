@@ -158,7 +158,7 @@ def part_two(path: Path) -> int:
 
 
 if __name__ == "__main__":
-    input_path = Path(__file__).parents[1] / "input" / "18.txt"
+    input_path = Path(__file__).parents[1] / "inputs" / "18.txt"
 
     print("Part 1:")
     print(part_one(input_path))

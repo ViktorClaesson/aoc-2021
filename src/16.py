@@ -110,7 +110,7 @@ if __name__ == "__main__":
         "F": "1111",
     }
 
-    input_path = Path(__file__).parents[1] / "input" / "16.txt"
+    input_path = Path(__file__).parents[1] / "inputs" / "16.txt"
     hex_str = utils.read_lines(input_path)[0]
     bit_str = "".join(hex_to_binary_converter[hex_digit] for hex_digit in hex_str)
     root_package = get_root_package(bit_str)

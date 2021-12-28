@@ -18,7 +18,7 @@ def main(path: Path, f: Callable[[int], int] = lambda x: x) -> int:
 
 
 if __name__ == "__main__":
-    input_path = Path(__file__).parents[1] / "input" / "07.txt"
+    input_path = Path(__file__).parents[1] / "inputs" / "07.txt"
     print("Part 1:")
     print(main(input_path))
     print("Part 2:")

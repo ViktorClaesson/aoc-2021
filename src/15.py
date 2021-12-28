@@ -45,7 +45,7 @@ def extend_matrix(matrix: COST_MATRIX, times: int) -> COST_MATRIX:
 
 
 if __name__ == "__main__":
-    input_path = Path(__file__).parents[1] / "input" / "15.txt"
+    input_path = Path(__file__).parents[1] / "inputs" / "15.txt"
     global_matrix = utils.read_matrix(input_path)
     global_cost_matrix: COST_MATRIX = {(x, y): v for y, row in enumerate(global_matrix) for x, v in enumerate(row)}
 

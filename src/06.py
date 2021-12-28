@@ -20,7 +20,7 @@ def main(path: Path, days: int) -> int:
 
 
 if __name__ == "__main__":
-    input_path = Path(__file__).parents[1] / "input" / "06.txt"
+    input_path = Path(__file__).parents[1] / "inputs" / "06.txt"
     print("Part 1:")
     print(main(input_path, days=80))
     print("Part 2:")
