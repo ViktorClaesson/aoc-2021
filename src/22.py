@@ -144,22 +144,15 @@ def split_reactor_range(reactor_cuboid_range: Range, instruction_range: Range) -
 
 def make_sub_reactor_cuboids(reactor_cuboid: Cuboid, instruction: Cuboid) -> list[Cuboid]:
     if instruction not in reactor_cuboid:
-        if Cuboid.intersects(reactor_cuboid, instruction):
-            raise Exception(f"HOLA WTF??? {reactor_cuboid} - {instruction}")
         return [reactor_cuboid]
 
-    to_return = [
+    return [
         Cuboid(state=reactor_cuboid.state, x_range=new_x_range, y_range=new_y_range, z_range=new_z_range)
         for new_x_range in split_reactor_range(reactor_cuboid.x_range, instruction.x_range)
         for new_y_range in split_reactor_range(reactor_cuboid.y_range, instruction.y_range)
         for new_z_range in split_reactor_range(reactor_cuboid.z_range, instruction.z_range)
         if (new_x_range != instruction.x_range) or (new_y_range != instruction.y_range) or (new_z_range != instruction.z_range)
     ]
-    if sum(cuboid.size() for cuboid in to_return) != reactor_cuboid.size() - instruction.size():
-        raise Exception("UGH why!?")
-    if any(Cuboid.intersects(cuboid, instruction) for cuboid in to_return):
-        raise Exception("EGGXUSE ME!?")
-    return to_return
 
 
 def split_instruction_range(reactor_cuboid_range: Range, instruction_range: Range) -> list[Range]:
@@ -172,8 +165,6 @@ def split_instruction_range(reactor_cuboid_range: Range, instruction_range: Rang
         instruction_left = Range(instruction_range.min, reactor_cuboid_range.min - 1)
         instruction_middle = Range(reactor_cuboid_range.min, reactor_cuboid_range.max)
         instruction_right = Range(reactor_cuboid_range.max + 1, instruction_range.max)
-        if instruction_left.size() + instruction_middle.size() + instruction_right.size() != instruction_range.size():
-            raise Exception("UGH why!?")
         return [instruction_left, instruction_middle, instruction_right]
     elif instruction_range.min < reactor_cuboid_range.min <= instruction_range.max <= reactor_cuboid_range.max:
         #    |------|    <- reactor
@@ -183,8 +174,6 @@ def split_instruction_range(reactor_cuboid_range: Range, instruction_range: Rang
         # |-||----|
         instruction_left = Range(instruction_range.min, reactor_cuboid_range.min - 1)
         instruction_right = Range(reactor_cuboid_range.min, instruction_range.max)
-        if instruction_left.size() + instruction_right.size() != instruction_range.size():
-            raise Exception("UGH why!?")
         return [instruction_left, instruction_right]
     elif reactor_cuboid_range.min <= instruction_range.min <= reactor_cuboid_range.max < instruction_range.max:
         #    |------|    <- reactor
@@ -194,8 +183,6 @@ def split_instruction_range(reactor_cuboid_range: Range, instruction_range: Rang
         #      |----||-|
         instruction_left = Range(instruction_range.min, reactor_cuboid_range.max)
         instruction_right = Range(reactor_cuboid_range.max + 1, instruction_range.max)
-        if instruction_left.size() + instruction_right.size() != instruction_range.size():
-            raise Exception("UGH why!?")
         return [instruction_left, instruction_right]
     else:
         return [instruction_range]
