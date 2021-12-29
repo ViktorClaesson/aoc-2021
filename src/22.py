@@ -195,7 +195,7 @@ def make_sub_instructions(reactor_cuboid: Cuboid, instruction: Cuboid) -> list[C
     if instruction in reactor_cuboid:
         return [instruction]
 
-    return [
+    sub_instructions = [
         Cuboid(
             state=instruction.state,
             x_range=new_x_range,
@@ -206,6 +206,7 @@ def make_sub_instructions(reactor_cuboid: Cuboid, instruction: Cuboid) -> list[C
         for new_y_range in split_instruction_range(reactor_cuboid.y_range, instruction.y_range)
         for new_z_range in split_instruction_range(reactor_cuboid.z_range, instruction.z_range)
     ]
+    return sub_instructions
 
 
 def make_all_sub_instructions(reactor: set[Cuboid], instruction: Cuboid) -> set[Cuboid]:
@@ -233,10 +234,15 @@ def handle_instruction_for_reactor(reactor: set[Cuboid], instruction: Cuboid) ->
         sub_instruction = sub_instructions.pop()
 
         # 2. Split instruction into sub instructions until each sub_instruction either does not intersect any reactor_cuboid or is a subset of one
-        if any(sub_instruction not in reactor_cuboid and Cuboid.intersects(reactor_cuboid, sub_instruction) for reactor_cuboid in new_reactor):
+        if any(Cuboid.intersects(reactor_cuboid, sub_instruction) for reactor_cuboid in new_reactor if sub_instruction not in reactor_cuboid):
             new_sub_instructions = make_all_sub_instructions(new_reactor, sub_instruction)
-            sub_instruction = new_sub_instructions.pop()
-            sub_instructions.update(new_sub_instructions)
+            for new_sub_instruction in new_sub_instructions:
+                if not any(Cuboid.intersects(reactor_cuboid, new_sub_instruction) for reactor_cuboid in new_reactor):
+                    if new_sub_instruction.state:
+                        new_reactor.add(new_sub_instruction)
+                else:
+                    sub_instructions.add(new_sub_instruction)
+            continue
 
         part_2 += datetime.now().timestamp() - time_0
         time_0 = datetime.now().timestamp()
@@ -246,11 +252,11 @@ def handle_instruction_for_reactor(reactor: set[Cuboid], instruction: Cuboid) ->
             if not any(sub_instruction in reactor_cuboid for reactor_cuboid in new_reactor):
                 new_reactor.add(sub_instruction)
         else:
-            new_reactor = {
-                new_reactor_cuboid
-                for reactor_cuboid in new_reactor
-                for new_reactor_cuboid in make_sub_reactor_cuboids(reactor_cuboid, sub_instruction)
-            }
+            for reactor_cuboid in new_reactor:
+                if sub_instruction in reactor_cuboid:
+                    new_reactor.remove(reactor_cuboid)
+                    new_reactor.update(make_sub_reactor_cuboids(reactor_cuboid, sub_instruction))
+                    break
         part_3 += datetime.now().timestamp() - time_0
         time_0 = datetime.now().timestamp()
 
@@ -278,6 +284,6 @@ if __name__ == "__main__":
     print("Part 2:")
     print(part_two(input_path))
 
-    print(f"part_1 total time: {part_1}")
-    print(f"part_2 total time: {part_2}")
-    print(f"part_3 total time: {part_3}")
+    print(f"part_1 total time: {part_1:.3f}s")
+    print(f"part_2 total time: {part_2:.3f}s")
+    print(f"part_3 total time: {part_3:.3f}s")
