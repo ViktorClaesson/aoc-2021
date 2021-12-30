@@ -1,0 +1,4 @@
+DCBC
+DCBA
+DBAC
+DAAB
